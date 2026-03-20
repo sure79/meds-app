@@ -773,7 +773,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     }
   },
 
-  calculateVoltageDropAPI: async (ambientTempC, cableType) => {
+  calculateVoltageDropAPI: async (ambientTempC: number, cableType: string) => {
     const { project } = get();
     set({ isCalculating: true, error: null });
     try {
@@ -782,7 +782,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     } catch (err) {
       // Local estimation
       const { CABLE_DATA, autoSelectCableSize } = await import('../utils/calculations');
-      const loads = project.loads.map(load => {
+      const loads = project.loads.map((load: import('../types').Load) => {
         const ratedCurrentA = calculateRatedCurrent(
           load.ratedPowerKW / load.efficiency,
           load.ratedVoltage,
@@ -879,7 +879,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     return false;
   },
 
-  loadProject: (project) => {
+  loadProject: (project: Project) => {
     set({ project, loadBalanceResult: null, shortCircuitResult: null, voltageDropResult: null, error: null });
   },
 
@@ -894,7 +894,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   },
 
   // ---- Project Management ----
-  newProject: (meta, vesselPreset) => {
+  newProject: (meta: ProjectMeta, vesselPreset?: string) => {
     const newProj: Project = {
       id: uuidv4(),
       meta: { ...meta, date: new Date().toISOString().split('T')[0] },
@@ -1096,7 +1096,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     }
   },
 
-  loadProjectFromList: (projectId) => {
+  loadProjectFromList: (projectId: string) => {
     const stored = getStoredProjects();
     const proj = stored.find(p => p.id === projectId);
     if (proj) {
@@ -1114,7 +1114,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     }
   },
 
-  deleteProjectFromList: (projectId) => {
+  deleteProjectFromList: (projectId: string) => {
     const stored = getStoredProjects().filter(p => p.id !== projectId);
     saveProjectsToStorage(stored);
     set({ projectList: loadProjectListFromStorage() });
@@ -1126,7 +1126,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     }
   },
 
-  duplicateProject: (projectId) => {
+  duplicateProject: (projectId: string) => {
     const stored = getStoredProjects();
     const source = stored.find(p => p.id === projectId);
     if (!source) return;
