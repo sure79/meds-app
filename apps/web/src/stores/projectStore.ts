@@ -702,7 +702,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     }
   },
 
-  calculateShortCircuitAPI: async (motorContribution, busTiesClosed) => {
+  calculateShortCircuitAPI: async (motorContribution: boolean, busTiesClosed: boolean) => {
     const { project } = get();
     set({ isCalculating: true, error: null });
     try {
@@ -710,14 +710,14 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       set({ shortCircuitResult: result, isCalculating: false });
     } catch (err) {
       // Local short circuit estimation
-      const busResults = project.buses.map(bus => {
-        const connectedGens = project.generators.filter(g => {
+      const busResults = project.buses.map((bus: Bus) => {
+        const connectedGens = project.generators.filter((g: Generator) => {
           if (g.connectedBusId === bus.id) return true;
           if (busTiesClosed) {
-            return project.busTies.some(bt =>
+            return project.busTies.some((bt: BusTie) =>
               bt.isClosed && (
-                (bt.busAId === bus.id && project.generators.some(gg => gg.connectedBusId === bt.busBId && gg.id === g.id)) ||
-                (bt.busBId === bus.id && project.generators.some(gg => gg.connectedBusId === bt.busAId && gg.id === g.id))
+                (bt.busAId === bus.id && project.generators.some((gg: Generator) => gg.connectedBusId === bt.busBId && gg.id === g.id)) ||
+                (bt.busBId === bus.id && project.generators.some((gg: Generator) => gg.connectedBusId === bt.busAId && gg.id === g.id))
               )
             );
           }
@@ -725,7 +725,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         });
 
         let totalSymKA = 0;
-        const sources = connectedGens.map(g => {
+        const sources = connectedGens.map((g: Generator) => {
           const ratedCurrentA = calculateRatedCurrent(g.ratedPowerKW, g.ratedVoltage, g.ratedPF, g.phase);
           const isc = (ratedCurrentA / (g.xdPercent / 100)) / 1000;
           totalSymKA += isc;
@@ -733,13 +733,13 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         });
 
         if (motorContribution) {
-          const motorLoads = project.loads.filter(l =>
+          const motorLoads = project.loads.filter((l: Load) =>
             l.connectedBusId === bus.id &&
             ['pump', 'fan', 'compressor', 'winch', 'crane', 'bow-thruster', 'hvac', 'motor'].includes(l.type)
           );
-          const motorContrib = motorLoads.reduce((sum, l) => {
+          const motorContrib = motorLoads.reduce((sum: number, l: Load) => {
             const ratedI = calculateRatedCurrent(l.ratedPowerKW / l.efficiency, l.ratedVoltage, l.ratedPF, l.phase);
-            return sum + (ratedI * 4) / 1000; // typical motor contribution ~4x rated
+            return sum + (ratedI * 4) / 1000;
           }, 0);
           if (motorContrib > 0) {
             totalSymKA += motorContrib;
@@ -750,8 +750,8 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         const peakKA = totalSymKA * 1.8;
         const breakingKA = totalSymKA * 0.9;
         const cbRatingKA = Math.max(...project.breakers
-          .filter(b => b.connectedFromId === bus.id || b.connectedToId === bus.id)
-          .map(b => b.breakingCapacityKA), 0) || totalSymKA * 1.5;
+          .filter((b: CircuitBreaker) => b.connectedFromId === bus.id || b.connectedToId === bus.id)
+          .map((b: CircuitBreaker) => b.breakingCapacityKA), 0) || totalSymKA * 1.5;
 
         return {
           busId: bus.id,
