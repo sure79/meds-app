@@ -1,0 +1,9 @@
+{
+  "KR": {"name": "한국선급", "voltage_drop_running": 6, "voltage_drop_starting": 15, "min_gen_margin": 10},
+  "ABS": {"name": "American Bureau of Shipping", "voltage_drop_running": 6, "voltage_drop_starting": 15, "min_gen_margin": 10},
+  "DNV": {"name": "Det Norske Veritas", "voltage_drop_running": 5, "voltage_drop_starting": 15, "min_gen_margin": 15},
+  "LR": {"name": "Lloyd's Register", "voltage_drop_running": 6, "voltage_drop_starting": 20, "min_gen_margin": 10},
+  "BV": {"name": "Bureau Veritas", "voltage_drop_running": 6, "voltage_drop_starting": 15, "min_gen_margin": 10},
+  "NK": {"name": "Nippon Kaiji Kyokai", "voltage_drop_running": 6, "voltage_drop_starting": 15, "min_gen_margin": 10},
+  "CCS": {"name": "China Classification Society", "voltage_drop_running": 5, "voltage_drop_starting": 15, "min_gen_margin": 10}
+}

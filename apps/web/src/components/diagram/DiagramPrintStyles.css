@@ -1,0 +1,73 @@
+@media print {
+  /* Hide application chrome */
+  .diagram-toolbar,
+  .diagram-tabs,
+  .diagram-sidebar,
+  .no-print,
+  nav,
+  aside,
+  header,
+  button,
+  [data-no-print] {
+    display: none !important;
+  }
+
+  /* White background, black text */
+  body {
+    background: white !important;
+    color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* A4 landscape page setup */
+  @page {
+    size: A4 landscape;
+    margin: 5mm;
+  }
+
+  /* Diagram page styling */
+  .diagram-page {
+    background: white !important;
+    color: black !important;
+    border: 2px solid black !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    width: 100% !important;
+    max-width: 287mm !important;
+    margin: 0 auto !important;
+  }
+
+  /* Page breaks between panels */
+  .print\\:break-after-page {
+    page-break-after: always;
+    break-after: page;
+  }
+
+  /* Ensure monospace fonts */
+  .diagram-page * {
+    font-family: 'Courier New', 'Consolas', monospace !important;
+  }
+
+  /* Hide edit-mode elements */
+  .edit-mode-only {
+    display: none !important;
+  }
+
+  /* Remove hover effects */
+  * {
+    cursor: default !important;
+  }
+
+  /* Ensure borders print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Remove shadows */
+  .diagram-page * {
+    box-shadow: none !important;
+  }
+}

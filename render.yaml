@@ -1,0 +1,44 @@
+version: "1"
+
+services:
+  # ---- Frontend: React Static Site ----
+  - type: web
+    name: meds-web
+    env: static
+    rootDir: apps/web
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    pullRequestPreviewsEnabled: true
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /*
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+    envVars:
+      - key: VITE_TURSO_DB_URL
+        sync: false          # set manually in Render dashboard
+      - key: VITE_TURSO_DB_AUTH_TOKEN
+        sync: false          # set manually in Render dashboard
+      - key: VITE_API_URL
+        fromService:
+          name: meds-api
+          type: web
+          property: host
+          envVarKey: RENDER_EXTERNAL_URL
+
+  # ---- Backend: Python FastAPI ----
+  - type: web
+    name: meds-api
+    env: python
+    rootDir: apps/api
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: ENVIRONMENT
+        value: production

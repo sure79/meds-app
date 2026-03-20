@@ -1,0 +1,9 @@
+{
+  "common_marine_loads": {
+    "mainLOPump": {"name": "Main L.O. Pump", "type": "pump", "kw": 15, "pf": 0.85, "start_method": "DOL", "start_multiplier": 6},
+    "mainCWPump": {"name": "Main C.W. Pump", "type": "pump", "kw": 30, "pf": 0.85, "start_method": "DOL", "start_multiplier": 6},
+    "steeringGear": {"name": "Steering Gear", "type": "motor", "kw": 30, "pf": 0.85, "start_method": "DOL", "start_multiplier": 6},
+    "bowThruster": {"name": "Bow Thruster", "type": "thruster", "kw": 200, "pf": 0.85, "start_method": "DOL", "start_multiplier": 6},
+    "acPlant": {"name": "A/C Plant", "type": "other", "kw": 80, "pf": 0.85, "start_method": "DOL", "start_multiplier": 6}
+  }
+}
